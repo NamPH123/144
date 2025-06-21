@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:background="@drawable/bg_dialog_rate"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/set_wallpaper"
+                android:textColor="@color/_2f2f2f"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSetLockScreen"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_choose"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@string/set_lock_screen"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSetHomeScreen"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_choose"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@string/set_home_screen"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSetLockHome"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_choose"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@string/set_lock_home_screen"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

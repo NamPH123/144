@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imv"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvTick"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/imv_tick" />
+    </RelativeLayout>
+</layout>

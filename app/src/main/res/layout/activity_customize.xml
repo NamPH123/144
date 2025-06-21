@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_home">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="55dp"
+            android:src="@drawable/imv_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="80dp"
+            android:ellipsize="marquee"
+            android:fontFamily="@font/dk_smiling_cat"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/customize"
+            android:textColor="@color/_2f2f2f"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@id/imvBack"
+            app:layout_constraintTop_toTopOf="@id/imvBack" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvApply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="6dp"
+            android:text="@string/apply"
+            android:textColor="@color/ff78e8"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/imvBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imvBack" />
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvBG"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_choose"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="@string/background"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvIcons"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_card_border"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="@string/icons"
+                android:textColor="@color/e09cd5"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctlBG"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/sw"
+                android:layout_width="36dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="22dp"
+                android:src="@drawable/ic_swith_false_per"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTurn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="marquee"
+                android:fontFamily="@font/roboto_medium"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:text="@string/turn_on_off_button_switch_to_set_wallpaper"
+                android:textColor="@color/_2f2f2f"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/sw"
+                app:layout_constraintEnd_toStartOf="@id/sw"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/sw" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="70dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintDimensionRatio="280:466"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTurn"
+                app:strokeColor="@color/white"
+                app:strokeWidth="1.5dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctlIcons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:itemCount="20"
+                tools:listitem="@layout/item_change_icons" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/llBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#33000000"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_bottom_sheet">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imvClose"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="17dp"
+                    android:src="@drawable/ic_x"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/choose_application"
+                    android:textColor="@color/_2f2f2f"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/imvClose"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/imvClose" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvChooseApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="32dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imvClose"
+                    app:spanCount="2"
+                    tools:itemCount="50"
+                    tools:listitem="@layout/item_home_app" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

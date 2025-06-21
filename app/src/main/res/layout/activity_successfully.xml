@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_home">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="55dp"
+            android:src="@drawable/imv_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="80dp"
+            android:ellipsize="marquee"
+            android:fontFamily="@font/dk_smiling_cat"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/successfully"
+            android:textColor="@color/_2f2f2f"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@id/imvBack"
+            app:layout_constraintTop_toTopOf="@id/imvBack" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvHome"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/imv_home"
+            app:layout_constraintBottom_toBottomOf="@id/imvBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imvBack" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imvIcons"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvBG"
+                android:layout_width="220dp"
+                android:layout_height="366dp"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/white"
+                app:strokeWidth="1.5dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imvBg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_mediumitalic"
+            android:gravity="center"
+            android:text="@string/icon_has_been_changed_successfully"
+            android:textColor="@color/_2f2f2f"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/rl" />
+
+        <LinearLayout
+            android:id="@+id/btnCreatNew"
+            android:layout_width="200dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_creat_new"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/imv_plus_creat_new" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/create_new"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

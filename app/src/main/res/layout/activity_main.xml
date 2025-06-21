@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_home">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:fontFamily="@font/dk_smiling_cat"
+            android:text="@string/icons"
+            android:textColor="@color/_2f2f2f"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvSetting"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/imv_setting"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvTitle" />
+
+        <fragment
+            android:id="@+id/flContainer"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="22dp"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/bottomNav"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:navGraph="@navigation/bottom_navigation_home" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:background="#FFFFFF"
+            app:compatShadowEnabled="true"
+            app:elevation="0dp"
+            app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@color/bottom_nav_selector"
+            app:itemTextAppearanceActive="@style/BottomNavTextActive"
+            app:itemTextAppearanceInactive="@style/BottomNavTextInactive"
+            app:itemTextColor="@color/bottom_nav_selector"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/menu_bottom_navigation" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

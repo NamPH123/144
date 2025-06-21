@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_choose_icon"
+            app:layout_constraintBottom_toBottomOf="@id/imv"
+            app:layout_constraintEnd_toEndOf="@id/imv"
+            app:layout_constraintStart_toStartOf="@id/imv"
+            app:layout_constraintTop_toTopOf="@id/imv" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@color/_2f2f2f"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="3dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percents" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

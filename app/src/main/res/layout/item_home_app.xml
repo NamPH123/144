@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="58dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="9dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imv"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:src="@color/_2f2f2f"
+            android:background="@drawable/bg_item_app" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Google Chrome"
+            android:textColor="@color/_2f2f2f"
+            android:textSize="12sp"
+            android:layout_marginHorizontal="4dp"
+            android:lines="2"
+            android:gravity="center"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"/>
+    </LinearLayout>
+</layout>

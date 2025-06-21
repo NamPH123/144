@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/imv_wallpaper_category"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/dk_smiling_cat"
+            android:gravity="center"
+            android:text="@string/category"
+            android:textColor="@color/_2f2f2f"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/imvCategory"
+            app:layout_constraintTop_toTopOf="@id/imvCategory" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvFromGallery"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="14dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/imv_gallery"
+            app:layout_constraintTop_toBottomOf="@id/imvCategory" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/dk_smiling_cat"
+            android:gravity="center"
+            android:text="@string/from_gallery"
+            android:textColor="@color/_2f2f2f"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/imvFromGallery"
+            app:layout_constraintTop_toTopOf="@id/imvFromGallery" />
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="26dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imvFromGallery">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/imv_suggestion" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/suggestion_for_you"
+                android:textColor="@color/_2f2f2f"
+                android:textSize="16sp" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll"
+            app:spanCount="2"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_sub_folder"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
