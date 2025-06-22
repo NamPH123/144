@@ -2,7 +2,7 @@ package com.namseox.st144_icon_changer.utils
 
 import android.content.Context
 import com.namseox.st144_icon_changer.R
-import com.namseox.st144_icon_changer.model.AppInfo
+import com.namseox.st144_icon_changer.model.AppInfoModel
 import com.namseox.st144_icon_changer.model.IconModel
 import com.namseox.st144_icon_changer.model.LanguageModel
 
@@ -10,7 +10,7 @@ object DataHelper {
     var arrTheme = arrayListOf<String>()
     var arrIcon = arrayListOf<IconModel>()
     var arrBG = arrayListOf<IconModel>()
-    var arrApp = arrayListOf<AppInfo>()
+    var arrApp = arrayListOf<AppInfoModel>()
 
     fun Context.getData() {
         var assetManager = assets
@@ -57,5 +57,7 @@ object DataHelper {
         LanguageModel("German", "de", R.drawable.ic_flag_germani),
         LanguageModel("Indonesian", "in", R.drawable.ic_flag_indo)
     )
-
+    fun searchApps(query: String): List<AppInfoModel> {
+        return arrApp.filter { it.name.contains(query, ignoreCase = true) }
+    }
 }

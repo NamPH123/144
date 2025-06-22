@@ -66,5 +66,7 @@
     <string name="set_lock_home_screen"><![CDATA[Set Lock & Home Screen]]></string>
     <string name="share">Share App</string>
     <string name="policy"><![CDATA[Privacy & Policy]]></string>
+    <string name="no_result_found">No Result Found</string>
+    <string name="you_have_not_selected_an_application_to_apply">You have not selected an application to apply</string>
 
 </resources>

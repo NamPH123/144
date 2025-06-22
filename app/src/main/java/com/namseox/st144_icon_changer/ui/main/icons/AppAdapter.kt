@@ -5,15 +5,15 @@ import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseAdapter
 import com.namseox.st144_icon_changer.base.AbsBaseDiffCallBack
 import com.namseox.st144_icon_changer.databinding.ItemHomeAppBinding
-import com.namseox.st144_icon_changer.model.AppInfo
+import com.namseox.st144_icon_changer.model.AppInfoModel
 import com.namseox.st144_icon_changer.utils.onSingleClick
 
-class AppAdapter : AbsBaseAdapter<AppInfo, ItemHomeAppBinding>(R.layout.item_home_app,AppDiffCallBack()) {
-    var onClick: ((AppInfo) -> Unit)? = null
+class AppAdapter : AbsBaseAdapter<AppInfoModel, ItemHomeAppBinding>(R.layout.item_home_app,AppDiffCallBack()) {
+    var onClick: ((AppInfoModel) -> Unit)? = null
     override fun bind(
         binding: ItemHomeAppBinding,
         position: Int,
-        data: AppInfo,
+        data: AppInfoModel,
         holder: RecyclerView.ViewHolder
     ) {
         binding.tv.text = data.name
@@ -23,17 +23,17 @@ class AppAdapter : AbsBaseAdapter<AppInfo, ItemHomeAppBinding>(R.layout.item_hom
         }
     }
 
-    class AppDiffCallBack : AbsBaseDiffCallBack<AppInfo>(){
+    class AppDiffCallBack : AbsBaseDiffCallBack<AppInfoModel>(){
         override fun itemsTheSame(
-            oldItem: AppInfo,
-            newItem: AppInfo
+            oldItem: AppInfoModel,
+            newItem: AppInfoModel
         ): Boolean {
            return oldItem.packageName == newItem.packageName
         }
 
         override fun contentsTheSame(
-            oldItem: AppInfo,
-            newItem: AppInfo
+            oldItem: AppInfoModel,
+            newItem: AppInfoModel
         ): Boolean {
             return oldItem.packageName != newItem.packageName
         }

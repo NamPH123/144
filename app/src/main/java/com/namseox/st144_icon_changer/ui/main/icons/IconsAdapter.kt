@@ -12,7 +12,7 @@ class IconsAdapter : AbsBaseAdapter<String, ItemHomeIconsChangerBinding>(
     R.layout.item_home_icons_changer,
     IconDiffCallBack()
 ) {
-    var onCLick: ((String) -> Unit)? = null
+    var onCLick: ((Int) -> Unit)? = null
     override fun bind(
         binding: ItemHomeIconsChangerBinding,
         position: Int,
@@ -21,7 +21,7 @@ class IconsAdapter : AbsBaseAdapter<String, ItemHomeIconsChangerBinding>(
     ) {
         Glide.with(binding.imv).load(ASSET + data).into(binding.imv)
         binding.imv.setOnClickListener {
-            onCLick?.invoke(data)
+            onCLick?.invoke(position)
         }
     }
 

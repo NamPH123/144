@@ -1,0 +1,85 @@
+package com.namseox.st144_icon_changer.ui.changeicon
+
+import android.view.View
+import com.namseox.st144_icon_changer.R
+import com.namseox.st144_icon_changer.base.AbsBaseActivity
+import com.namseox.st144_icon_changer.databinding.ActivityChangeIconsBinding
+import com.namseox.st144_icon_changer.model.ChangeIconModel
+import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
+import com.namseox.st144_icon_changer.utils.DataHelper.arrIcon
+import com.namseox.st144_icon_changer.utils.createMultipleShortcuts
+import com.namseox.st144_icon_changer.utils.onSingleClick
+import com.namseox.st144_icon_changer.utils.showToast
+
+class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
+    var posChangeIcon = 0
+    var pos = 0
+    var arrChangeIcon = arrayListOf<ChangeIconModel>()
+    lateinit var adapter: ChangeIconsAdapter
+    lateinit var appAdapter: AppAdapter
+    override fun getLayoutId(): Int = R.layout.activity_change_icons
+
+    override fun initView() {
+        pos = intent.getIntExtra("pos", 0)
+
+        adapter = ChangeIconsAdapter()
+        binding.rcv.adapter = adapter
+        binding.rcv.itemAnimator = null
+        arrIcon[pos].path.forEach {
+            arrChangeIcon.add(ChangeIconModel(it, false, null))
+        }
+        adapter.submitList(arrChangeIcon)
+
+        appAdapter = AppAdapter()
+        binding.rcvChooseApp.adapter = appAdapter
+        binding.rcvChooseApp.itemAnimator = null
+        appAdapter.submitList(arrApp)
+    }
+
+    override fun initAction() {
+        binding.imvClose.onSingleClick {
+            binding.llBottomSheet.visibility = View.GONE
+        }
+        binding.llBottomSheet.onSingleClick {
+            binding.llBottomSheet.visibility = View.GONE
+        }
+        binding.ctl.onSingleClick { }
+        binding.imvBack.onSingleClick { finish() }
+        binding.tvApply.onSingleClick {
+            createMultipleShortcuts(applicationContext,arrChangeIcon.filter { it.check }.mapNotNull { it.app!! })
+            finish()
+        }
+        adapter.onClick = { pos, type ->
+            when (type) {
+                "plus" -> {
+                    binding.rcvChooseApp.scrollToPosition(0)
+                    binding.llBottomSheet.visibility = View.VISIBLE
+                    posChangeIcon = pos
+                }
+
+                "sw" -> {
+                    if (arrChangeIcon[pos].app == null) {
+                        showToast(
+                            applicationContext,
+                            R.string.you_have_not_selected_an_application_to_apply
+                        )
+                    } else {
+                        arrChangeIcon[pos].check = !arrChangeIcon[pos].check
+                    }
+                    adapter.submitList(arrChangeIcon)
+                }
+
+                "delete" -> {
+                    arrChangeIcon[pos].app = null
+                    arrChangeIcon[pos].check = false
+                    adapter.submitList(arrChangeIcon)
+                }
+            }
+        }
+        appAdapter.onClick = {
+            arrChangeIcon[posChangeIcon].app = arrApp[it]
+            binding.llBottomSheet.visibility = View.GONE
+            adapter.submitList(arrChangeIcon)
+        }
+    }
+}

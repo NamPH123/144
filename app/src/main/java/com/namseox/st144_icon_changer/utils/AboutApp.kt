@@ -66,8 +66,6 @@ import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.facebook.shimmer.Shimmer
@@ -76,7 +74,7 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.dialog.DialogRate
-import com.namseox.st144_icon_changer.model.AppInfo
+import com.namseox.st144_icon_changer.model.AppInfoModel
 import com.namseox.st144_icon_changer.utils.Const.NAME_SAVE_FILE
 import com.namseox.st144_icon_changer.utils.Const.REQUEST_CODE_CAMERA
 import com.namseox.st144_icon_changer.utils.Const.REQUEST_STORAGE_PERMISSION
@@ -98,8 +96,6 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import kotlin.collections.plusAssign
-import kotlin.rem
 
 
 var RATE = "rate"
@@ -1728,7 +1724,7 @@ fun createShortcut(
     shortcutManager?.requestPinShortcut(shortcut, null)
 }
 
-fun Context.getAllLaunchableApps(): List<AppInfo> {
+fun Context.getAllLaunchableApps(): List<AppInfoModel> {
     val pm = packageManager
     val intent = Intent(Intent.ACTION_MAIN, null)
     intent.addCategory(Intent.CATEGORY_LAUNCHER)
@@ -1736,12 +1732,41 @@ fun Context.getAllLaunchableApps(): List<AppInfo> {
     val resolvedApps = pm.queryIntentActivities(intent, 0)
 
     return resolvedApps.map {
-        AppInfo(
+        AppInfoModel(
             name = it.loadLabel(pm).toString(),
             packageName = it.activityInfo.packageName,
             icon = it.loadIcon(pm)
         )
     }
+}
+
+fun createMultipleShortcuts(context: Context, apps: List<AppInfoModel>) {
+    apps.forEach { app ->
+        val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
+        if (launchIntent != null) {
+            val shortcutIntent = Intent("com.android.launcher.action.INSTALL_SHORTCUT").apply {
+                putExtra(Intent.EXTRA_SHORTCUT_NAME, app.name)
+                putExtra(Intent.EXTRA_SHORTCUT_ICON, drawableToBitmap(app.icon))
+                putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent)
+                putExtra("duplicate", false)
+            }
+            context.sendBroadcast(shortcutIntent)
+        }
+    }
+}
+
+fun drawableToBitmap(drawable: Drawable): Bitmap {
+    if (drawable is BitmapDrawable) return drawable.bitmap
+
+    val bitmap = Bitmap.createBitmap(
+        drawable.intrinsicWidth.takeIf { it > 0 } ?: 1,
+        drawable.intrinsicHeight.takeIf { it > 0 } ?: 1,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return bitmap
 }
 
 

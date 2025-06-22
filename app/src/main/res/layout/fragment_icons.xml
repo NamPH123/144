@@ -48,19 +48,49 @@
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/tvContent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvApp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctlAllApp"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:layout_marginTop="12dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/tvSearch"
-            app:spanCount="2"
-            tools:itemCount="50"
-            tools:listitem="@layout/item_home_app" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvSearch">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvApp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:itemCount="50"
+                tools:listitem="@layout/item_home_app" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imv_no_item"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:src="@drawable/imv_no_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="30dp"
+                android:visibility="gone"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_no_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_result_found"
+                android:textColor="@color/_656565"
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_mediumitalic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imv_no_item"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <LinearLayout
             android:id="@+id/ll"
@@ -71,7 +101,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rcvApp">
+            app:layout_constraintTop_toBottomOf="@id/ctlAllApp">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
