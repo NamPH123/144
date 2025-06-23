@@ -1,28 +1,22 @@
-package com.namseox.st144_icon_changer.ui.main.icons
+package com.namseox.st144_icon_changer.ui.creatnewicons
 
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import com.namseox.st144_icon_changer.R
-import com.namseox.st144_icon_changer.base.AbsBaseFragment
-import com.namseox.st144_icon_changer.databinding.FragmentIconsBinding
+import com.namseox.st144_icon_changer.base.AbsBaseActivity
+import com.namseox.st144_icon_changer.databinding.ActivityCreateNewIconsBinding
 import com.namseox.st144_icon_changer.model.AppInfoModel
-import com.namseox.st144_icon_changer.ui.changeicon.ChangeIconsActivity
-import com.namseox.st144_icon_changer.ui.editicons.EditIconsActivity
 import com.namseox.st144_icon_changer.ui.main.MainActivity
-import com.namseox.st144_icon_changer.utils.Const.DATA
+import com.namseox.st144_icon_changer.ui.main.icons.AppAdapter
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
-import com.namseox.st144_icon_changer.utils.DataHelper.arrIcon
 import com.namseox.st144_icon_changer.utils.DataHelper.searchApps
 import com.namseox.st144_icon_changer.utils.newIntent
-import java.io.File
+import com.namseox.st144_icon_changer.utils.onSingleClick
 
-class IconsFragment : AbsBaseFragment<FragmentIconsBinding, MainActivity>() {
+class CreatNewIconsActivity : AbsBaseActivity<ActivityCreateNewIconsBinding>() {
     lateinit var adapterIcon: AppAdapter
-    lateinit var adapterIconsChanger: IconsAdapter
     var arrSubApp = arrayListOf<AppInfoModel>()
-
-    var arrIconChanger = arrayListOf<String>()
-    override fun getLayout(): Int = R.layout.fragment_icons
+    override fun getLayoutId(): Int = R.layout.activity_create_new_icons
 
     override fun initView() {
         arrSubApp.addAll(arrApp)
@@ -31,17 +25,11 @@ class IconsFragment : AbsBaseFragment<FragmentIconsBinding, MainActivity>() {
         binding.rcvApp.itemAnimator = null
         adapterIcon.submitList(arrSubApp)
 
-        adapterIconsChanger = IconsAdapter()
-        binding.rcvIconChanger.adapter = adapterIconsChanger
-        binding.rcvIconChanger.itemAnimator = null
-        arrIconChanger.addAll(arrIcon.flatMap { it.path }.filter { it.contains("avatar") })
-        adapterIconsChanger.submitList(arrIconChanger)
-
-
     }
 
-    override fun setClick() {
+    override fun initAction() {
         binding.apply {
+            imvBack.onSingleClick {startActivity(newIntent(applicationContext, MainActivity::class.java)) }
             tvSearch.addTextChangedListener {
                 arrSubApp.clear()
                 if (it.isNullOrEmpty()) {
@@ -60,12 +48,7 @@ class IconsFragment : AbsBaseFragment<FragmentIconsBinding, MainActivity>() {
             }
         }
         adapterIcon.onClick = {
-            startActivity(
-                newIntent(requireContext(), EditIconsActivity::class.java).putExtra(DATA, arrApp.indexOf(it))
-            )
-        }
-        adapterIconsChanger.onCLick = {
-            startActivity(newIntent(requireContext(), ChangeIconsActivity::class.java).putExtra("pos",it))
+
         }
     }
 }

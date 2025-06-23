@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="center">
 
@@ -17,7 +17,7 @@
             android:id="@+id/bg"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/bg_choose_icon"
+            android:background="@drawable/bg_choose_icon"
             app:layout_constraintBottom_toBottomOf="@id/imv"
             app:layout_constraintEnd_toEndOf="@id/imv"
             app:layout_constraintStart_toStartOf="@id/imv"

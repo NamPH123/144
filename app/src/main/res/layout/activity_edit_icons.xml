@@ -83,6 +83,23 @@
                 android:textColor="@color/_2f2f2f"
                 android:textSize="14sp" />
 
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="14dp"
+                android:background="@null"
+                android:fontFamily="@font/roboto_regular"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="20"
+                android:minWidth="6dp"
+                android:text="Google Chrome"
+                android:textColor="@color/_2f2f2f"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imvEdit"
                 android:layout_width="20dp"
@@ -90,6 +107,15 @@
                 android:layout_marginVertical="7dp"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/imv_edit" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imvTick"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginVertical="7dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/imv_tick_pink"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -114,7 +140,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:minHeight="70dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvMyIcons"
@@ -159,6 +187,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/choose_icon"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/_2f2f2f"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -171,13 +202,14 @@
                 app:layout_constraintTop_toBottomOf="@id/tv">
 
                 <LinearLayout
-                    android:id="@+id/tvCategory"
+                    android:id="@+id/llCategory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
@@ -187,6 +219,7 @@
                         android:textSize="14sp" />
 
                     <LinearLayout
+                        android:id="@+id/ll1"
                         android:layout_width="match_parent"
                         android:layout_height="4dp"
                         android:layout_marginTop="16dp"
@@ -194,13 +227,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/tvGallery"
+                    android:id="@+id/llGallery"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvGallery"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
@@ -210,6 +244,7 @@
                         android:textSize="14sp" />
 
                     <LinearLayout
+                        android:id="@+id/ll2"
                         android:layout_width="match_parent"
                         android:layout_height="4dp"
                         android:layout_marginTop="16dp"

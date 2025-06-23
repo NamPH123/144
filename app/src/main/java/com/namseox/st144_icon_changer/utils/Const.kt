@@ -16,4 +16,9 @@ object Const {
     var SIZE_LOCAL = 2
     var NAME_SAVE_FILE = "Sahur Maker"
 
+    var TYPE = "tyhhtythpe"
+    var DATA = "dahtsgta"
+    var ICON = "ahahg"
+    var MYICON = "myicon"
+
 }

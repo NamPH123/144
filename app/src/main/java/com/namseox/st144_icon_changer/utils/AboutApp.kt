@@ -5,11 +5,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.ContentUris
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo
@@ -59,6 +62,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.camera.core.Camera
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
@@ -177,7 +181,7 @@ fun Activity.rateUs(i: Int, view: View?) {
             }
         }
     })
-    if (!SharedPreferenceUtils.getInstance(this).getBooleanValue("rate")) {
+    if (!SharedPreferenceUtils.getInstance(this).getBooleanValue(RATE)) {
         dialog.show()
     }
 }
@@ -197,7 +201,7 @@ fun Activity.backPress(providerSharedPreference: SharedPreferenceUtils) {
     a += 1
     providerSharedPreference.putNumber("rate2", a)
     if (a % 2 == 0) {
-        if (!providerSharedPreference.getBooleanValue("rate")
+        if (!providerSharedPreference.getBooleanValue(RATE)
         ) {
             rateUs(1, null)
         } else {
@@ -1740,33 +1744,135 @@ fun Context.getAllLaunchableApps(): List<AppInfoModel> {
     }
 }
 
-fun createMultipleShortcuts(context: Context, apps: List<AppInfoModel>) {
-    apps.forEach { app ->
-        val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
-        if (launchIntent != null) {
-            val shortcutIntent = Intent("com.android.launcher.action.INSTALL_SHORTCUT").apply {
-                putExtra(Intent.EXTRA_SHORTCUT_NAME, app.name)
-                putExtra(Intent.EXTRA_SHORTCUT_ICON, drawableToBitmap(app.icon))
-                putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent)
-                putExtra("duplicate", false)
+fun createMultipleShortcuts(
+    context: Context,
+    apps: List<AppInfoModel>,
+    paths: List<String>,
+    name: String? = null,
+    funt: () -> Unit
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+
+        fun pinNext(index: Int) {
+            if (index >= apps.size) {
+                funt()
+                return
             }
-            context.sendBroadcast(shortcutIntent)
+
+            val app = apps[index]
+            val launchIntent = context.packageManager.getLaunchIntentForPackage(app.packageName)
+            if (launchIntent == null) {
+                showToast(context, R.string.cant_open_app)
+                pinNext(index + 1) // skip nếu app lỗi
+                return
+            }
+
+            val shortcutIntent = Intent(launchIntent).apply {
+                action = Intent.ACTION_MAIN
+                addCategory(Intent.CATEGORY_LAUNCHER)
+            }
+
+            val shortcut = ShortcutInfo.Builder(context, "shortcut_${app.packageName}")
+                .setShortLabel(
+                    name ?: app.name
+                )
+                .setLongLabel(name ?: app.name)
+                .setIcon(Icon.createWithBitmap(getBitmapFromAssets(context, paths[index])))
+                .setIntent(shortcutIntent)
+                .build()
+
+            // Tạo PendingIntent để xử lý callback sau khi user thêm shortcut xong
+            val callbackIntent = PendingIntent.getBroadcast(
+                context,
+                index,
+                Intent("com.yourapp.SHORTCUT_ADDED_$index"),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            context.registerReceiver(object : BroadcastReceiver() {
+                override fun onReceive(ctx: Context?, intent: Intent?) {
+                    context.unregisterReceiver(this)
+                    pinNext(index + 1)
+                }
+            }, IntentFilter("com.yourapp.SHORTCUT_ADDED_$index"))
+
+            shortcutManager?.requestPinShortcut(shortcut, callbackIntent.intentSender)
         }
+
+        pinNext(0)
+    } else {
+        showToast(context, R.string.unsupported_device)
     }
 }
 
 fun drawableToBitmap(drawable: Drawable): Bitmap {
-    if (drawable is BitmapDrawable) return drawable.bitmap
-
-    val bitmap = Bitmap.createBitmap(
-        drawable.intrinsicWidth.takeIf { it > 0 } ?: 1,
-        drawable.intrinsicHeight.takeIf { it > 0 } ?: 1,
-        Bitmap.Config.ARGB_8888
-    )
-    val canvas = Canvas(bitmap)
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return bitmap
+    return if (drawable is BitmapDrawable) {
+        drawable.bitmap
+    } else {
+        val width = drawable.intrinsicWidth.takeIf { it > 0 } ?: 96
+        val height = drawable.intrinsicHeight.takeIf { it > 0 } ?: 96
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        bitmap
+    }
 }
+
+fun getBitmapFromAssets(context: Context, fileName: String): Bitmap? {
+    return try {
+        val inputStream = context.assets.open(fileName)
+        BitmapFactory.decodeStream(inputStream)
+    } catch (e: IOException) {
+        e.printStackTrace()
+        null
+    }
+}
+
+fun View.hide() {
+    this.visibility = View.GONE
+}
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+var cameraManager: CameraManager? = null
+var hasBackCamera = false
+var hasFrontCamera = false
+var hasFlash: Boolean? = null
+var cameraId: String? = null
+fun Activity.flashManager(open: Boolean,camera: Camera?): Boolean {
+    if (hasFlash == null) {
+        hasFlash = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
+    }
+    if (hasFlash!!) {
+        if (cameraManager == null) {
+            cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            cameraId = cameraManager!!.cameraIdList.first {
+                cameraManager!!.getCameraCharacteristics(it)
+                    .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+            }
+            for (id in cameraManager!!.cameraIdList) {
+                val characteristics = cameraManager!!.getCameraCharacteristics(id)
+                val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                if (facing == CameraCharacteristics.LENS_FACING_BACK) {
+                    hasBackCamera = true
+                }
+                if (facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                    hasFrontCamera = true
+                }
+            }
+        }
+        camera?.cameraControl?.enableTorch(open)
+
+//        cameraManager!!.setTorchMode(cameraId!!, open)
+        return true
+    } else {
+        return false
+    }
+}
+
 
 

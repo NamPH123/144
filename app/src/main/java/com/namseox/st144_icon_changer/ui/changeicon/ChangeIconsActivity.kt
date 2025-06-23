@@ -5,9 +5,14 @@ import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityChangeIconsBinding
 import com.namseox.st144_icon_changer.model.ChangeIconModel
+import com.namseox.st144_icon_changer.ui.success.SuccessActivity
+import com.namseox.st144_icon_changer.utils.Const.DATA
+import com.namseox.st144_icon_changer.utils.Const.ICON
+import com.namseox.st144_icon_changer.utils.Const.TYPE
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
 import com.namseox.st144_icon_changer.utils.DataHelper.arrIcon
 import com.namseox.st144_icon_changer.utils.createMultipleShortcuts
+import com.namseox.st144_icon_changer.utils.newIntent
 import com.namseox.st144_icon_changer.utils.onSingleClick
 import com.namseox.st144_icon_changer.utils.showToast
 
@@ -46,8 +51,17 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
         binding.ctl.onSingleClick { }
         binding.imvBack.onSingleClick { finish() }
         binding.tvApply.onSingleClick {
-            createMultipleShortcuts(applicationContext,arrChangeIcon.filter { it.check }.mapNotNull { it.app!! })
-            finish()
+            createMultipleShortcuts(
+                applicationContext,
+                arrChangeIcon.filter { it.check }.map { it.app!! },
+                arrChangeIcon.filter { it.check }.map { it.path }){
+                startActivity(
+                    newIntent(
+                        applicationContext,
+                        SuccessActivity::class.java
+                    ).putExtra(DATA, arrIcon[pos].path.find { it.contains("avatar") }).putExtra(TYPE,ICON)
+                )
+            }
         }
         adapter.onClick = { pos, type ->
             when (type) {

@@ -5,7 +5,7 @@
 
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dp"
@@ -17,11 +17,11 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
             android:text="Cute"
-            android:textColor="@color/white"
+            android:textColor="@color/_2f2f2f"
             android:textSize="14sp"
             android:background="@drawable/bg_choose_category_false"
             android:paddingHorizontal="20dp"
             android:paddingTop="7dp"
             android:paddingBottom="8dp"/>
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

@@ -7,6 +7,7 @@ import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivitySettingBinding
 import com.namseox.st144_icon_changer.model.SettingModel
 import com.namseox.st144_icon_changer.ui.language.LanguageActivity
+import com.namseox.st144_icon_changer.utils.RATE
 import com.namseox.st144_icon_changer.utils.SharedPreferenceUtils
 import com.namseox.st144_icon_changer.utils.newIntent
 import com.namseox.st144_icon_changer.utils.onSingleClick
@@ -34,7 +35,7 @@ class SettingActivity : AbsBaseActivity<ActivitySettingBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_setting
     override fun initView() {
         try {
-            if (sharedPreferences.getBooleanValue("rate2")) {
+            if (sharedPreferences.getBooleanValue(RATE)) {
                 listSetting.removeAt(1)
             }
         }catch (e : Exception){

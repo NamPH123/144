@@ -56,7 +56,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/tvSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,11 +65,14 @@
             android:background="@drawable/bg_search"
             android:drawableEnd="@drawable/icon_search"
             android:fontFamily="@font/roboto_regular"
+            android:hint="@string/search_app"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             android:paddingVertical="9dp"
             android:paddingStart="14dp"
             android:paddingEnd="10dp"
-            android:text="@string/search_app"
-            android:textColor="@color/aaaaaa"
+            android:textColor="@color/_2f2f2f"
+            android:textColorHint="@color/aaaaaa"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/tvContent" />
 
@@ -87,5 +90,29 @@
             android:orientation="horizontal"
             app:spanCount="2"/>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imv_no_item"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/imv_no_icon"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSearch" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_no_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/roboto_mediumitalic"
+            android:text="@string/no_result_found"
+            android:textColor="@color/_656565"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imv_no_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

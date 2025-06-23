@@ -54,6 +54,7 @@
     <string name="filter">Filter</string>
     <string name="successfully">Successfully</string>
     <string name="icon_has_been_changed_successfully">Icon has been changed successfully!</string>
+    <string name="list_icon_has_been_changed_successfully">List icon has been changed successfully!</string>
     <string name="create_new">Create New</string>
     <string name="please_choose_an_app_to_change_icon">Please choose an app to change icon</string>
     <string name="customize">Customize</string>
@@ -68,5 +69,13 @@
     <string name="policy"><![CDATA[Privacy & Policy]]></string>
     <string name="no_result_found">No Result Found</string>
     <string name="you_have_not_selected_an_application_to_apply">You have not selected an application to apply</string>
+    <string name="unsupported_device">Unsupported device</string>
+    <string name="cant_open_app">Can\'t open app</string>
+    <string name="app_name_cannot_be_blank">App name cannot be blank</string>
+    <string name="rear_camera_not_supported">Rear camera not supported</string>
+    <string name="no_front_flash_support">Flash only supports rear camera</string>
+    <string name="front_camera_not_supported">Front camera not supported</string>
+    <string name="phone_does_not_support_flash">Phone does not support flash</string>
+    <string name="photo_capture_failed">Photo capture failed</string>
 
 </resources>

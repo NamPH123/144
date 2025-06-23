@@ -65,6 +65,7 @@
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
                 tools:itemCount="50"
+                android:minHeight="230dp"
                 tools:listitem="@layout/item_home_app" />
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imv_no_item"

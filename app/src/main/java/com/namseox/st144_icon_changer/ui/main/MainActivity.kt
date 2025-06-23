@@ -10,11 +10,18 @@ import com.namseox.st144_icon_changer.ui.main.icons.IconsFragment
 import com.namseox.st144_icon_changer.ui.main.themes.ThemesFragment
 import com.namseox.st144_icon_changer.ui.main.wallpaper.WallpaperFragment
 import com.namseox.st144_icon_changer.ui.setting.SettingActivity
+import com.namseox.st144_icon_changer.utils.SharedPreferenceUtils
+import com.namseox.st144_icon_changer.utils.backPress
 import com.namseox.st144_icon_changer.utils.changeFragment
 import com.namseox.st144_icon_changer.utils.newIntent
 import com.namseox.st144_icon_changer.utils.onSingleClick
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AbsBaseActivity<ActivityMainBinding>() {
+    @Inject
+    lateinit var sharedPreferenceUtils: SharedPreferenceUtils
     lateinit var navHostFragment: NavHostFragment
     lateinit var navController: NavController
 
@@ -42,5 +49,8 @@ class MainActivity : AbsBaseActivity<ActivityMainBinding>() {
                 )
             )
         }
+    }
+    override fun onBackPressed() {
+        backPress(SharedPreferenceUtils.getInstance(applicationContext))
     }
 }
