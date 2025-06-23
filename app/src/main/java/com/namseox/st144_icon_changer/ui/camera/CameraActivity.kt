@@ -2,10 +2,6 @@ package com.namseox.st144_icon_changer.ui.camera
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.os.Build
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -25,7 +21,6 @@ import com.namseox.st144_icon_changer.utils.hasFrontCamera
 import com.namseox.st144_icon_changer.utils.onSingleClick
 import com.namseox.st144_icon_changer.utils.showToast
 import java.io.File
-import java.io.FileOutputStream
 
 class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
     var checkFlash = false
@@ -76,7 +71,7 @@ class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
             it.setSurfaceProvider(binding.previewView.surfaceProvider)
         }
         val rotation = try {
-            windowManager.defaultDisplay.rotation
+            binding.previewView.display.rotation
         } catch (e: Exception) {
             0
         }
@@ -102,20 +97,18 @@ class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
         binding.btnCamera.onSingleClick {
             val imagesDir = File(filesDir, "cache")
             if (!imagesDir.exists()) imagesDir.mkdirs()
-            val photoFile = File(imagesDir, "cache.png")
+            var photoFile = File(imagesDir, "cache.png")
 
             val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
             imageCapture.takePicture(
                 outputOptions,
-                ContextCompat.getMainExecutor(this),
+                ContextCompat.getMainExecutor(applicationContext),
                 object : ImageCapture.OnImageSavedCallback {
-                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        // Ảnh đã lưu thành công, xoay đúng chiều nếu cần
-                        fixImageOrientation(photoFile)
+                    override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+
                     }
 
-                    override fun onError(exception: ImageCaptureException) {
+                    override fun onError(exc: ImageCaptureException) {
                         showToast(applicationContext, R.string.photo_capture_failed)
                     }
                 }
@@ -160,36 +153,5 @@ class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
                 }
             }
         }
-    }
-    fun fixImageOrientation(file: File) {
-        try {
-            val exif = ExifInterface(file.absolutePath)
-            val orientation = exif.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_NORMAL
-            )
-
-            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-            val rotatedBitmap = when (orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, 90f)
-                ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, 180f)
-                ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, 270f)
-                else -> bitmap
-            }
-
-            // Ghi đè lại file đã xoay
-            val out = FileOutputStream(file)
-            rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-            out.flush()
-            out.close()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-    fun rotateBitmap(bitmap: Bitmap, degree: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(degree)
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 }
