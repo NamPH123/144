@@ -14,10 +14,12 @@ import androidx.core.content.ContextCompat
 import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityCameraBinding
+import com.namseox.st144_icon_changer.ui.editphoto.EditPhotoActivity
 import com.namseox.st144_icon_changer.utils.checkPermision
 import com.namseox.st144_icon_changer.utils.flashManager
 import com.namseox.st144_icon_changer.utils.hasBackCamera
 import com.namseox.st144_icon_changer.utils.hasFrontCamera
+import com.namseox.st144_icon_changer.utils.newIntent
 import com.namseox.st144_icon_changer.utils.onSingleClick
 import com.namseox.st144_icon_changer.utils.showToast
 import java.io.File
@@ -105,7 +107,7 @@ class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
                 ContextCompat.getMainExecutor(applicationContext),
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-
+                        startActivity(newIntent(applicationContext, EditPhotoActivity::class.java))
                     }
 
                     override fun onError(exc: ImageCaptureException) {

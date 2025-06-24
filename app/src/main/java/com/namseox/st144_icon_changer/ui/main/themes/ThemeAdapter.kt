@@ -13,7 +13,7 @@ class ThemeAdapter : AbsBaseAdapter<String, ItemThemeBinding>(
     R.layout.item_theme,
     IconDiffCallBack()
 ) {
-    var onCLick: ((String) -> Unit)? = null
+    var onCLick: ((Int) -> Unit)? = null
     override fun bind(
         binding: ItemThemeBinding,
         position: Int,
@@ -22,7 +22,7 @@ class ThemeAdapter : AbsBaseAdapter<String, ItemThemeBinding>(
     ) {
         Glide.with(binding.imv).load(ASSET + data).into(binding.imv)
         binding.imv.setOnClickListener {
-            onCLick?.invoke(data)
+            onCLick?.invoke(position)
         }
     }
 

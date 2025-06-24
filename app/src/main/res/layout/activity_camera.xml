@@ -35,7 +35,7 @@
                 android:id="@+id/imvFlash"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_flash"
+                android:src="@drawable/ic_flash_false"
                 app:layout_constraintBottom_toBottomOf="@id/imvBack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
