@@ -19,6 +19,8 @@ object Const {
     var TYPE = "tyhhtythpe"
     var DATA = "dahtsgta"
     var ICON = "ahahg"
+    var WALLPAPER = "pgygvhb"
+    var THEMES = "ksgjffdf"
     var MYICON = "myicon"
 
 }

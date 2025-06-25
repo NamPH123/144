@@ -77,5 +77,8 @@
     <string name="front_camera_not_supported">Front camera not supported</string>
     <string name="phone_does_not_support_flash">Phone does not support flash</string>
     <string name="photo_capture_failed">Photo capture failed</string>
+    <string name="please_wait_for_data_loading">Please wait for data loading</string>
+    <string name="background_has_been_setup_successfully">Background has been setup successfully!</string>
+    <string name="theme_has_been_setup_successfully">Theme has been setup successfully!</string>
 
 </resources>

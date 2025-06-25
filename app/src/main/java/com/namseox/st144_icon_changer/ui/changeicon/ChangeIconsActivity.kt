@@ -31,7 +31,10 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
         binding.rcv.adapter = adapter
         binding.rcv.itemAnimator = null
         arrIcon[pos].path.forEach {
-            arrChangeIcon.add(ChangeIconModel(it, false, null))
+            if(!it.contains("avatar")){
+                arrChangeIcon.add(ChangeIconModel(it, false, null))
+            }
+//            arrChangeIcon.add(ChangeIconModel(it, false, null))
         }
         adapter.submitList(arrChangeIcon)
 

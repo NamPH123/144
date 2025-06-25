@@ -26,6 +26,7 @@
             app:strokeWidth="1dp">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
