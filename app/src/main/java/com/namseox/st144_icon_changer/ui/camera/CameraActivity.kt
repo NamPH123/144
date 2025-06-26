@@ -157,8 +157,21 @@ class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
                     binding.imvFlash.setImageResource(R.drawable.imv_flash_off)
                 }
                 if (!flashManager(checkFlash, camera)) {
+                    checkFlash = false
+                    binding.imvFlash.setImageResource(R.drawable.imv_flash_off)
                     showToast(applicationContext, R.string.phone_does_not_support_flash)
                 }
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (checkFlash) {
+            if (!flashManager(checkFlash, camera)) {
+                checkFlash = false
+                binding.imvFlash.setImageResource(R.drawable.imv_flash_off)
+                showToast(applicationContext, R.string.phone_does_not_support_flash)
             }
         }
     }

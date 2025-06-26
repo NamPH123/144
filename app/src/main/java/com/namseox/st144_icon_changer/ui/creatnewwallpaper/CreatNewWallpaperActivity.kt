@@ -50,13 +50,14 @@ class CreatNewWallpaperActivity : AbsBaseActivity<ActivityCreateNewWallpaperBind
 
     override fun initAction() {
         adapter.onClick = {
-            startActivity(newIntent(applicationContext, SetwallpaperActivity::class.java).putExtra(
+            startActivity(
+                newIntentOnCreat(applicationContext, SetwallpaperActivity::class.java).putExtra(
                 DATA,
                 ASSET+ arrString[it]
             ))
         }
         binding.apply {
-            imvBack.onSingleClick { finish() }
+            imvBack.onSingleClick { startActivity(newIntent(applicationContext,MainActivity::class.java)) }
             imvCategory.onSingleClick {
                 startActivity(newIntentOnCreat(applicationContext, CategoryActivity::class.java))
             }

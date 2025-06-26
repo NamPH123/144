@@ -40,12 +40,22 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
                     arrChangeIcon.add(ChangeIconModel(it, false, null))
                 }
             }
-            adapter.submitList(arrChangeIcon)
+//            adapter.submitList(arrChangeIcon)
 
             appAdapter = AppAdapter()
             binding.rcvChooseApp.adapter = appAdapter
             binding.rcvChooseApp.itemAnimator = null
             appAdapter.submitList(arrApp)
+
+            arrChangeIcon[0].app = arrApp[0]
+            arrChangeIcon[1].app = arrApp[1]
+            arrChangeIcon[2].app = arrApp[2]
+            arrChangeIcon[3].app = arrApp[3]
+            arrChangeIcon[0].check = true
+            arrChangeIcon[1].check = true
+            arrChangeIcon[2].check = true
+            arrChangeIcon[3].check = true
+            adapter.submitList(arrChangeIcon)
         }
     }
 
@@ -59,7 +69,7 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
         binding.ctl.onSingleClick { }
         binding.imvBack.onSingleClick { finish() }
         binding.tvApply.onSingleClick {
-            if(arrChangeIcon.filter { it.check }.size>0){
+            if(arrChangeIcon.filter { it.check }.isNotEmpty()){
                 createMultipleShortcuts(
                     applicationContext,
                     arrChangeIcon.filter { it.check }.map { it.app!! },
@@ -79,9 +89,11 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
         adapter.onClick = { pos, type ->
             when (type) {
                 "plus" -> {
-                    binding.rcvChooseApp.scrollToPosition(0)
-                    binding.llBottomSheet.visibility = View.VISIBLE
-                    posChangeIcon = pos
+                    if(arrChangeIcon[pos].app == null){
+                        binding.rcvChooseApp.scrollToPosition(0)
+                        binding.llBottomSheet.visibility = View.VISIBLE
+                        posChangeIcon = pos
+                    }
                 }
 
                 "sw" -> {
@@ -105,6 +117,7 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
         }
         appAdapter.onClick = {
             arrChangeIcon[posChangeIcon].app = arrApp[it]
+            arrChangeIcon[posChangeIcon].check = true
             binding.llBottomSheet.visibility = View.GONE
             adapter.submitList(arrChangeIcon)
         }

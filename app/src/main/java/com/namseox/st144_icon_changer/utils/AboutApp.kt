@@ -1734,6 +1734,7 @@ fun Context.getAllLaunchableApps(): List<AppInfoModel> {
     val resolvedApps = pm.queryIntentActivities(intent, 0)
 
     return resolvedApps.map {
+        Log.d(TAG, "getAllLaunchableApps: ${it.loadLabel(pm).toString()}")
         AppInfoModel(
             name = it.loadLabel(pm).toString(),
             packageName = it.activityInfo.packageName,

@@ -13,6 +13,7 @@ import com.namseox.st144_icon_changer.utils.Const.DATA
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
 import com.namseox.st144_icon_changer.utils.DataHelper.searchApps
 import com.namseox.st144_icon_changer.utils.newIntent
+import com.namseox.st144_icon_changer.utils.newIntentOnCreat
 import com.namseox.st144_icon_changer.utils.onSingleClick
 
 class CreatNewIconsActivity : AbsBaseActivity<ActivityCreateNewIconsBinding>() {
@@ -55,7 +56,7 @@ class CreatNewIconsActivity : AbsBaseActivity<ActivityCreateNewIconsBinding>() {
             }
         }
         adapterIcon.onClick = {
-            newIntent(applicationContext, EditIconsActivity::class.java).putExtra(DATA, arrApp.indexOf(it))
+            startActivity(newIntentOnCreat(applicationContext, EditIconsActivity::class.java).putExtra(DATA, arrApp.indexOf(it)))
         }
     }
 }

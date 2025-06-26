@@ -13,6 +13,7 @@ import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityPermissionBinding
 import com.namseox.st144_icon_changer.ui.main.MainActivity
 import com.namseox.st144_icon_changer.utils.Const
+import com.namseox.st144_icon_changer.utils.Const.REQUEST_CODE_CAMERA
 import com.namseox.st144_icon_changer.utils.Const.REQUEST_NOTIFICATION_PERMISSION
 import com.namseox.st144_icon_changer.utils.Const.REQUEST_STORAGE_PERMISSION
 import com.namseox.st144_icon_changer.utils.SharedPreferenceUtils
@@ -35,10 +36,10 @@ class PermissionActivity: AbsBaseActivity<ActivityPermissionBinding>() {
         count = sharedPreferenceUtils.getNumber("count")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             binding.rl4.visibility = View.VISIBLE
-            binding.rl2.visibility = View.GONE
+//            binding.rl2.visibility = View.GONE
         } else {
             binding.rl4.visibility = View.GONE
-            binding.rl2.visibility = View.VISIBLE
+//            binding.rl2.visibility = View.VISIBLE
         }
         val space = " "
         binding.tvTitle.text = TextUtils.concat(
@@ -82,6 +83,19 @@ class PermissionActivity: AbsBaseActivity<ActivityPermissionBinding>() {
                 )
             }
         }
+        binding.swiVibrate3.onSingleClick {
+            if (ActivityCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ){
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.CAMERA),
+                    Const.REQUEST_CODE_CAMERA
+                )
+            }
+        }
         binding.swiVibrate4.onSingleClick {
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -112,6 +126,9 @@ class PermissionActivity: AbsBaseActivity<ActivityPermissionBinding>() {
                 REQUEST_NOTIFICATION_PERMISSION -> {
                     binding.swiVibrate4.setImageResource(R.drawable.ic_swith_true_per)
                 }
+                REQUEST_CODE_CAMERA->{
+                    binding.swiVibrate3.setImageResource(R.drawable.ic_swith_true_per)
+                }
             }
         }
     }
@@ -131,12 +148,21 @@ class PermissionActivity: AbsBaseActivity<ActivityPermissionBinding>() {
             } else {
                 binding.swiVibrate4.setImageResource(R.drawable.ic_swith_false_per)
             }
+        }
+        if (ActivityCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ){
+            binding.swiVibrate3.setImageResource(R.drawable.ic_swith_true_per)
         }else{
+            binding.swiVibrate3.setImageResource(R.drawable.ic_swith_false_per)
+        }
             if (checkPermision(this)) {
                 binding.swiVibrate2.setImageResource(R.drawable.ic_swith_true_per)
             } else {
                 binding.swiVibrate2.setImageResource(R.drawable.ic_swith_false_per)
             }
-        }
+//        }
     }
 }

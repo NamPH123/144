@@ -20,9 +20,13 @@ import com.namseox.st144_icon_changer.utils.Const.DATA
 import com.namseox.st144_icon_changer.utils.Const.ICON
 import com.namseox.st144_icon_changer.utils.Const.MYICON
 import com.namseox.st144_icon_changer.utils.Const.REQUEST_CODE_CAMERA
+import com.namseox.st144_icon_changer.utils.Const.REQUEST_STORAGE_PERMISSION
 import com.namseox.st144_icon_changer.utils.Const.TYPE
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
 import com.namseox.st144_icon_changer.utils.DataHelper.arrIcon
+import com.namseox.st144_icon_changer.utils.SharedPreferenceUtils
+import com.namseox.st144_icon_changer.utils.checkPermision
+import com.namseox.st144_icon_changer.utils.checkUsePermision
 import com.namseox.st144_icon_changer.utils.createMultipleShortcuts
 import com.namseox.st144_icon_changer.utils.drawableToBitmap
 import com.namseox.st144_icon_changer.utils.hide
@@ -33,9 +37,14 @@ import com.namseox.st144_icon_changer.utils.requesPermission
 import com.namseox.st144_icon_changer.utils.show
 import com.namseox.st144_icon_changer.utils.showKeyboard
 import com.namseox.st144_icon_changer.utils.showToast
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
+    @Inject
+    lateinit var sharedPreferenceUtils: SharedPreferenceUtils
     var pos = 0
     var arrPath = arrayListOf<String>()
     var arrCategory = arrayListOf<String>()
@@ -189,7 +198,16 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
 
             }
             btnGallery.onSingleClick {
-                startActivity(newIntent(applicationContext, GalleryActivity::class.java).putExtra(DATA,ICON))
+                if (!checkPermision(applicationContext)) {
+                    ActivityCompat.requestPermissions(
+                        this@EditIconsActivity,
+                        checkUsePermision(),
+                        Const.REQUEST_STORAGE_PERMISSION
+                    )
+                }else{
+                    startActivity(newIntent(applicationContext, GalleryActivity::class.java).putExtra(DATA,ICON))
+                }
+
             }
             btnCamera.onSingleClick {
                 if (ActivityCompat.checkSelfPermission(
@@ -277,6 +295,10 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
             REQUEST_CODE_CAMERA -> {
                     startActivity(newIntent(applicationContext, CameraActivity::class.java))
             }
+            REQUEST_STORAGE_PERMISSION ->{
+                startActivity(newIntent(applicationContext, GalleryActivity::class.java).putExtra(DATA,ICON))
+            }
         }
     }
+
 }

@@ -37,7 +37,7 @@ class LanguageActivity : AbsBaseActivity<ActivityLanguageBinding>() {
         if (codeLang.equals("")) {
             binding.icBack.visibility = View.GONE
             binding.tvTitle2.visibility = View.GONE
-            codeLang = "en"
+//            codeLang = "en"
         }else{
             binding.tvTitle1.visibility = View.GONE
         }

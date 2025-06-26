@@ -72,12 +72,22 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
                     arrChangeIcon.add(ChangeIconModel(it, false, null))
                 }
             }
-            adapter.submitList(arrChangeIcon)
+
 
             appAdapter = AppAdapter()
             binding.rcvChooseApp.adapter = appAdapter
             binding.rcvChooseApp.itemAnimator = null
             appAdapter.submitList(arrApp)
+
+            arrChangeIcon[0].app = arrApp[0]
+            arrChangeIcon[1].app = arrApp[1]
+            arrChangeIcon[2].app = arrApp[2]
+            arrChangeIcon[3].app = arrApp[3]
+            arrChangeIcon[0].check = true
+            arrChangeIcon[1].check = true
+            arrChangeIcon[2].check = true
+            arrChangeIcon[3].check = true
+            adapter.submitList(arrChangeIcon)
         }
 
     }
@@ -111,8 +121,16 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
                                     mBitmap,
                                     null,
                                     false,
-                                    WallpaperManager.FLAG_LOCK or WallpaperManager.FLAG_SYSTEM
+                                    WallpaperManager.FLAG_LOCK
                                 )
+                                binding.imv.postDelayed({
+                                    wallpaperManager.setBitmap(
+                                        mBitmap,
+                                        null,
+                                        false,
+                                        WallpaperManager.FLAG_SYSTEM
+                                    )
+                                },500)
                             }
                         }
                         createMultipleShortcuts(
@@ -132,20 +150,25 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
                     }
                     dialog.show()
                 }else{
-                    createMultipleShortcuts(
-                        applicationContext,
-                        arrChangeIcon.filter { it.check }.map { it.app!! },
-                        arrChangeIcon.filter { it.check }.map { it.path }){
-                        startActivity(
-                            newIntent(
-                                applicationContext,
-                                SuccessActivity::class.java
-                            ).putExtra(DATA,ASSET+ arrTheme[pos]).putExtra(
-                                TYPE,
-                                THEMES
+                    if(arrChangeIcon.filter { it.check }.isNotEmpty()){
+                        createMultipleShortcuts(
+                            applicationContext,
+                            arrChangeIcon.filter { it.check }.map { it.app!! },
+                            arrChangeIcon.filter { it.check }.map { it.path }){
+                            startActivity(
+                                newIntent(
+                                    applicationContext,
+                                    SuccessActivity::class.java
+                                ).putExtra(DATA,ASSET+ arrTheme[pos]).putExtra(
+                                    TYPE,
+                                    THEMES
+                                )
                             )
-                        )
+                        }
+                    }else{
+                        showToast(applicationContext,R.string.you_have_no_choice_yet)
                     }
+
                 }
             }
             imvClose.onSingleClick {
@@ -210,6 +233,7 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
         }
         appAdapter.onClick = {
             arrChangeIcon[posChangeIcon].app = arrApp[it]
+            arrChangeIcon[posChangeIcon].check = true
             binding.llBottomSheet.visibility = View.GONE
             adapter.submitList(arrChangeIcon)
         }

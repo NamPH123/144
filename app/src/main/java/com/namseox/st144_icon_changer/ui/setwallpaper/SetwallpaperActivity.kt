@@ -84,8 +84,16 @@ class SetwallpaperActivity : AbsBaseActivity<ActivitySetWallpaperBinding>() {
                                 mBitmap,
                                 null,
                                 false,
-                                WallpaperManager.FLAG_LOCK or WallpaperManager.FLAG_SYSTEM
+                                WallpaperManager.FLAG_LOCK
                             )
+                            binding.imv.postDelayed({
+                                wallpaperManager.setBitmap(
+                                    mBitmap,
+                                    null,
+                                    false,
+                                    WallpaperManager.FLAG_SYSTEM
+                                )
+                            },500)
                         }
                     }
                     showToast(applicationContext,R.string.wallpaper_set_successfully)

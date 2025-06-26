@@ -82,5 +82,6 @@
     <string name="theme_has_been_setup_successfully">Theme has been setup successfully!</string>
     <string name="wallpaper_set_successfully">Wallpaper set successfully</string>
     <string name="you_have_no_choice_yet">You have no choice yet.</string>
+    <string name="camera">Camera</string>
 
 </resources>

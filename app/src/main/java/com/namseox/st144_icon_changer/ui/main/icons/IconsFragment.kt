@@ -16,6 +16,7 @@ import com.namseox.st144_icon_changer.utils.DataHelper.arrIcon
 import com.namseox.st144_icon_changer.utils.DataHelper.mutableLiveData
 import com.namseox.st144_icon_changer.utils.DataHelper.searchApps
 import com.namseox.st144_icon_changer.utils.newIntent
+import com.namseox.st144_icon_changer.utils.onSingleClick
 import java.io.File
 
 class IconsFragment : AbsBaseFragment<FragmentIconsBinding, MainActivity>() {
@@ -52,6 +53,7 @@ class IconsFragment : AbsBaseFragment<FragmentIconsBinding, MainActivity>() {
 
     override fun setClick() {
         binding.apply {
+            tvSearch.onSingleClick { binding.tvSearch.isCursorVisible = true }
             tvSearch.addTextChangedListener {
                 arrSubApp.clear()
                 if (it.isNullOrEmpty()) {
@@ -70,11 +72,13 @@ class IconsFragment : AbsBaseFragment<FragmentIconsBinding, MainActivity>() {
             }
         }
         adapterIcon.onClick = {
+            binding.tvSearch.isCursorVisible = false
             startActivity(
                 newIntent(requireContext(), EditIconsActivity::class.java).putExtra(DATA, arrApp.indexOf(it))
             )
         }
         adapterIconsChanger.onCLick = {
+            binding.tvSearch.isCursorVisible = false
             startActivity(newIntent(requireContext(), ChangeIconsActivity::class.java).putExtra("pos",it))
         }
     }
