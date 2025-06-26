@@ -6,8 +6,10 @@ import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityCreateNewIconsBinding
 import com.namseox.st144_icon_changer.model.AppInfoModel
+import com.namseox.st144_icon_changer.ui.editicons.EditIconsActivity
 import com.namseox.st144_icon_changer.ui.main.MainActivity
 import com.namseox.st144_icon_changer.ui.main.icons.AppAdapter
+import com.namseox.st144_icon_changer.utils.Const.DATA
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
 import com.namseox.st144_icon_changer.utils.DataHelper.searchApps
 import com.namseox.st144_icon_changer.utils.newIntent
@@ -19,11 +21,16 @@ class CreatNewIconsActivity : AbsBaseActivity<ActivityCreateNewIconsBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_create_new_icons
 
     override fun initView() {
-        arrSubApp.addAll(arrApp)
-        adapterIcon = AppAdapter()
-        binding.rcvApp.adapter = adapterIcon
-        binding.rcvApp.itemAnimator = null
-        adapterIcon.submitList(arrSubApp)
+        if(arrApp.size==0){
+            startActivity(newIntent(applicationContext,MainActivity::class.java))
+        }else{
+            arrSubApp.addAll(arrApp)
+            adapterIcon = AppAdapter()
+            binding.rcvApp.adapter = adapterIcon
+            binding.rcvApp.itemAnimator = null
+            adapterIcon.submitList(arrSubApp)
+        }
+
 
     }
 
@@ -48,7 +55,7 @@ class CreatNewIconsActivity : AbsBaseActivity<ActivityCreateNewIconsBinding>() {
             }
         }
         adapterIcon.onClick = {
-
+            newIntent(applicationContext, EditIconsActivity::class.java).putExtra(DATA, arrApp.indexOf(it))
         }
     }
 }

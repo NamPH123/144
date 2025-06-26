@@ -79,6 +79,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.dialog.DialogRate
 import com.namseox.st144_icon_changer.model.AppInfoModel
+import com.namseox.st144_icon_changer.utils.Const.MYICON
 import com.namseox.st144_icon_changer.utils.Const.NAME_SAVE_FILE
 import com.namseox.st144_icon_changer.utils.Const.REQUEST_CODE_CAMERA
 import com.namseox.st144_icon_changer.utils.Const.REQUEST_STORAGE_PERMISSION
@@ -133,7 +134,12 @@ fun newIntent(context: Context, cls: Class<*>): Intent {
         cls
     ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 }
-
+fun newIntentOnCreat(context: Context, cls: Class<*>): Intent {
+    return Intent(
+        context,
+        cls
+    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+}
 var unItem: (() -> Unit)? = null
 fun Activity.rateUs(i: Int, view: View?) {
     var dialog = DialogRate(this)
@@ -1156,27 +1162,27 @@ fun getAllVideoFolders(context: Context): List<String> {
     }
 
     // Query video
-    val videoProjection = arrayOf(
-        MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
-        MediaStore.Video.Media.BUCKET_ID,
-        MediaStore.Video.Media.DATA
-    )
-    val videoUri: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-    val videoCursor: Cursor? = context.contentResolver.query(
-        videoUri, videoProjection, null, null, null
-    )
+//    val videoProjection = arrayOf(
+//        MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+//        MediaStore.Video.Media.BUCKET_ID,
+//        MediaStore.Video.Media.DATA
+//    )
+//    val videoUri: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+//    val videoCursor: Cursor? = context.contentResolver.query(
+//        videoUri, videoProjection, null, null, null
+//    )
 
-    videoCursor?.use {
-        val dataColumnIndex = it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-        while (it.moveToNext()) {
-            val videoPath = it.getString(dataColumnIndex)
-            val folderPath = File(videoPath).parent
-
-            if (folderPath != null && !mediaFolders.contains(folderPath)) {
-                mediaFolders.add(folderPath)
-            }
-        }
-    }
+//    videoCursor?.use {
+//        val dataColumnIndex = it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+//        while (it.moveToNext()) {
+//            val videoPath = it.getString(dataColumnIndex)
+//            val folderPath = File(videoPath).parent
+//
+//            if (folderPath != null && !mediaFolders.contains(folderPath)) {
+//                mediaFolders.add(folderPath)
+//            }
+//        }
+//    }
 
     return mediaFolders
 }
@@ -1591,23 +1597,15 @@ fun saveBitmap(
 ) {
     CoroutineScope(Dispatchers.IO).launch {
         var file: File
-        if (fileName == "") {
-            val downloadsDir =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val appDir = File(downloadsDir, NAME_SAVE_FILE)
-            if (!appDir.exists()) appDir.mkdirs()
-            file = File(appDir, "${System.currentTimeMillis()}.png")
-        } else {
-            if (!check) {
-                val imagesDir = File(context.filesDir, "images")
-                if (!imagesDir.exists()) imagesDir.mkdirs()
-                file = File(imagesDir, "${System.currentTimeMillis()}.png")
-            } else {
-                val imagesDir = File(context.filesDir, "cache")
-                if (!imagesDir.exists()) imagesDir.mkdirs()
-                file = File(imagesDir, "${System.currentTimeMillis()}.png")
-            }
-        }
+//            if (!check) {
+        val imagesDir = File(context.filesDir, MYICON)
+        if (!imagesDir.exists()) imagesDir.mkdirs()
+        file = File(imagesDir, "${System.currentTimeMillis()}.png")
+//            } else {
+//                val imagesDir = File(context.filesDir, "cache")
+//                if (!imagesDir.exists()) imagesDir.mkdirs()
+//                file = File(imagesDir, "${System.currentTimeMillis()}.png")
+//            }
 
         try {
             FileOutputStream(file).use { outputStream ->
@@ -1749,6 +1747,7 @@ fun createMultipleShortcuts(
     apps: List<AppInfoModel>,
     paths: List<String>,
     name: String? = null,
+    bitmap: Bitmap? = null,
     funt: () -> Unit
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -1773,12 +1772,23 @@ fun createMultipleShortcuts(
                 addCategory(Intent.CATEGORY_LAUNCHER)
             }
 
-            val shortcut = ShortcutInfo.Builder(context, "shortcut_${app.packageName}")
+            val shortcut = ShortcutInfo.Builder(
+                context,
+                "shortcut_${app.packageName}_${System.currentTimeMillis()}"
+            )
                 .setShortLabel(
                     name ?: app.name
                 )
                 .setLongLabel(name ?: app.name)
-                .setIcon(Icon.createWithBitmap(getBitmapFromAssets(context, paths[index])))
+                .setIcon(
+                    Icon.createWithBitmap(
+                        bitmap ?: if (paths[index].contains(MYICON)) {
+                                BitmapFactory.decodeFile(paths[index])
+                            } else {
+                                getBitmapFromAssets(context, paths[index])
+                            }
+                    )
+                )
                 .setIntent(shortcutIntent)
                 .build()
 

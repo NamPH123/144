@@ -80,5 +80,7 @@
     <string name="please_wait_for_data_loading">Please wait for data loading</string>
     <string name="background_has_been_setup_successfully">Background has been setup successfully!</string>
     <string name="theme_has_been_setup_successfully">Theme has been setup successfully!</string>
+    <string name="wallpaper_set_successfully">Wallpaper set successfully</string>
+    <string name="you_have_no_choice_yet">You have no choice yet.</string>
 
 </resources>

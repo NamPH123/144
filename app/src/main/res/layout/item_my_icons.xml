@@ -7,17 +7,17 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginEnd="6dp"
         android:gravity="center">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/bg"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/bg_my_icons"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize6Percents"/>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imv"
@@ -25,6 +25,6 @@
             android:layout_height="52dp"
             android:src="@color/white"
             android:layout_centerInParent="true"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize7Percents"/>
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize6Percents"/>
     </RelativeLayout>
 </layout>

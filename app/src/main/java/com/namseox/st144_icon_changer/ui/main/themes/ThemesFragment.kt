@@ -7,6 +7,7 @@ import com.namseox.st144_icon_changer.ui.customize.CustomizeActivity
 import com.namseox.st144_icon_changer.ui.main.MainActivity
 import com.namseox.st144_icon_changer.utils.Const.DATA
 import com.namseox.st144_icon_changer.utils.DataHelper.arrTheme
+import com.namseox.st144_icon_changer.utils.DataHelper.mutableLiveData
 import com.namseox.st144_icon_changer.utils.newIntent
 
 class ThemesFragment : AbsBaseFragment<FragmentThemesBinding, MainActivity>() {
@@ -16,7 +17,12 @@ class ThemesFragment : AbsBaseFragment<FragmentThemesBinding, MainActivity>() {
     override fun initView() {
         adapterTheme = ThemeAdapter()
         binding.rcv.adapter = adapterTheme
-        adapterTheme.submitList(arrTheme)
+
+        mutableLiveData.observe(this){
+            if(it==1){
+                adapterTheme.submitList(arrTheme)
+            }
+        }
     }
 
     override fun setClick() {

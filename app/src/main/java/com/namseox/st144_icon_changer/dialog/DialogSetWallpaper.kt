@@ -12,71 +12,28 @@ import com.namseox.st144_icon_changer.databinding.DialogSetWallpaperBinding
 import com.namseox.st144_icon_changer.utils.onSingleClick
 import com.namseox.st144_icon_changer.utils.showToast
 
-class DialogSetWallpaper(activity: Activity, var imageUrl: String) :
+class DialogSetWallpaper(activity: Activity) :
     BaseDialog<DialogSetWallpaperBinding>(activity, true) {
-    var onClick: (() -> Unit)? = null
-    var bitmap: Bitmap? = null
+    var onClick: ((Int) -> Unit)? = null
     override fun getContentView(): Int = R.layout.dialog_set_wallpaper
 
     override fun initView() {
-        Glide.with(context.applicationContext)
-            .asBitmap()
-            .load(imageUrl)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                ) {
-                    bitmap = resource
-                }
 
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
-
-            })
-        val wallpaperManager = WallpaperManager.getInstance(context)
         binding.apply {
             tvSetLockScreen.onSingleClick {
-                if (bitmap == null) {
-                    showToast(context, R.string.please_wait_for_data_loading)
-                } else {
-                    wallpaperManager.setBitmap(
-                        bitmap,
-                        null,
-                        false,
-                        WallpaperManager.FLAG_LOCK
-                    )
                     dismiss()
-                    onClick?.invoke()
-                }
+                    onClick?.invoke(0)
+
             }
             tvSetHomeScreen.onSingleClick {
-                if (bitmap == null) {
-                    showToast(context, R.string.please_wait_for_data_loading)
-                } else {
-                    wallpaperManager.setBitmap(
-                        bitmap,
-                        null,
-                        false,
-                        WallpaperManager.FLAG_SYSTEM
-                    )
                     dismiss()
-                    onClick?.invoke()
-                }
+                    onClick?.invoke(1)
+
             }
             tvSetLockHome.onSingleClick {
-                if (bitmap == null) {
-                    showToast(context, R.string.please_wait_for_data_loading)
-                } else {
-                    wallpaperManager.setBitmap(
-                        bitmap,
-                        null,
-                        false,
-                        WallpaperManager.FLAG_LOCK or WallpaperManager.FLAG_SYSTEM
-                    )
                     dismiss()
-                    onClick?.invoke()
-                }
+                    onClick?.invoke(2)
+
             }
         }
     }

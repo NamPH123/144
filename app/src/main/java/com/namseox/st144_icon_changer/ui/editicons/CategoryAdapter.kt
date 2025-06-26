@@ -36,7 +36,9 @@ class CategoryAdapter : AbsBaseAdapter<String, ItemChooseIconCategoryBinding>(
     ) {
         binding.tv.text = data
         binding.root.onSingleClick {
-            onClick?.invoke(position)
+            if(pos != position){
+                onClick?.invoke(position)
+            }
         }
         if (pos == position) {
             binding.tv.setTextColor("#FFFFFF".toColorInt())

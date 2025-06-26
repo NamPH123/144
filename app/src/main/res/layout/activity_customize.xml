@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_home">
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imvBack"
             android:layout_width="32dp"

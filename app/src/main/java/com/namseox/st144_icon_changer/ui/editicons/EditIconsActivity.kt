@@ -2,7 +2,7 @@ package com.namseox.st144_icon_changer.ui.editicons
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.toColorInt
@@ -11,6 +11,8 @@ import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityEditIconsBinding
 import com.namseox.st144_icon_changer.ui.camera.CameraActivity
+import com.namseox.st144_icon_changer.ui.gallery.GalleryActivity
+import com.namseox.st144_icon_changer.ui.main.MainActivity
 import com.namseox.st144_icon_changer.ui.success.SuccessActivity
 import com.namseox.st144_icon_changer.utils.Const
 import com.namseox.st144_icon_changer.utils.Const.ASSET
@@ -21,8 +23,8 @@ import com.namseox.st144_icon_changer.utils.Const.REQUEST_CODE_CAMERA
 import com.namseox.st144_icon_changer.utils.Const.TYPE
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
 import com.namseox.st144_icon_changer.utils.DataHelper.arrIcon
-import com.namseox.st144_icon_changer.utils.checkPermision
 import com.namseox.st144_icon_changer.utils.createMultipleShortcuts
+import com.namseox.st144_icon_changer.utils.drawableToBitmap
 import com.namseox.st144_icon_changer.utils.hide
 import com.namseox.st144_icon_changer.utils.hideKeyboard
 import com.namseox.st144_icon_changer.utils.newIntent
@@ -45,31 +47,36 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_edit_icons
 
     override fun initView() {
-        pos = intent.getIntExtra(DATA, 0)
-        binding.imvIcons.setImageDrawable(arrApp[pos].icon)
+        if(arrApp.size==0){
+            startActivity(newIntent(applicationContext,MainActivity::class.java))
+        }else{
+            pos = intent.getIntExtra(DATA, 0)
+            binding.imvIcons.setImageDrawable(arrApp[pos].icon)
 //        Glide.with(applicationContext).load(ASSET + arrIcon[0].path[0]).into(binding.imvIcons)
-        binding.tvEdit.text = arrApp[pos].name
-        binding.edtEdit.setText(arrApp[pos].name)
+            binding.tvEdit.text = arrApp[pos].name
+            binding.edtEdit.setText(arrApp[pos].name)
 
-        adapterMyIcons = MyIconsAdapter()
-        binding.rcvMyIcons.adapter = adapterMyIcons
-        binding.rcvMyIcons.itemAnimator = null
+            adapterMyIcons = MyIconsAdapter()
+            binding.rcvMyIcons.adapter = adapterMyIcons
+            binding.rcvMyIcons.itemAnimator = null
 
-        getData()
-        binding.ctlCategory.show()
-        binding.ctlGallery.hide()
-        adapterCategory = CategoryAdapter()
-        binding.rcvCategory.adapter = adapterCategory
-        binding.rcvCategory.itemAnimator = null
-        arrCategory.addAll(arrIcon.map { it.category })
-        adapterCategory.submitList(arrCategory)
+            getData()
+            binding.ctlCategory.show()
+            binding.ctlGallery.hide()
+            adapterCategory = CategoryAdapter()
+            binding.rcvCategory.adapter = adapterCategory
+            binding.rcvCategory.itemAnimator = null
+            arrCategory.addAll(arrIcon.map { it.category })
+            adapterCategory.submitList(arrCategory)
 
-        adapterPathCategory = PathCategoryAdapter()
-        binding.rcvContentCategory.adapter = adapterPathCategory
-        binding.rcvContentCategory.itemAnimator = null
-        arrItemCategory.addAll(arrIcon[0].path)
-        arrItemCategory.removeAt(arrItemCategory.size - 1)
-        adapterPathCategory.submitList(arrItemCategory)
+            adapterPathCategory = PathCategoryAdapter()
+            binding.rcvContentCategory.adapter = adapterPathCategory
+            binding.rcvContentCategory.itemAnimator = null
+            arrItemCategory.addAll(arrIcon[0].path)
+            arrItemCategory.removeAt(arrItemCategory.size - 1)
+            adapterPathCategory.submitList(arrItemCategory)
+        }
+
     }
 
     override fun initAction() {
@@ -147,20 +154,43 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
                 createMultipleShortcuts(
                     applicationContext,
                     listOf(arrApp[pos]),
-                    listOf(arrIcon[posChoose[0]].path[posChoose[1]]),
-                    binding.tvEdit.text.toString().trim()
+                    if(adapterMyIcons.pos>=0){
+                        listOf(arrPath[adapterMyIcons.pos])
+                    }else{
+                        if(posChoose[0]>-1 && posChoose[1]>-1){
+                            listOf(arrIcon[posChoose[0]].path[posChoose[1]])
+                        }else{
+                            listOf()
+                        }
+                    },
+                    binding.tvEdit.text.toString().trim(),
+                    if(posChoose[0]>-1 && posChoose[1]>-1 || adapterMyIcons.pos>=0){
+                        null
+                    }else{
+                        drawableToBitmap(arrApp[pos].icon)
+                    }
                 ) {
                     startActivity(
                         newIntent(applicationContext, SuccessActivity::class.java).putExtra(
                             DATA,
-                            arrIcon[posChoose[0]].path[posChoose[1]]
+                            if(adapterMyIcons.pos>=0){
+                                arrPath[adapterMyIcons.pos]
+                            }else{
+                                if(posChoose[0]>-1 && posChoose[1]>-1){
+                                    ASSET + arrIcon[posChoose[0]].path[posChoose[1]]
+                                }else{
+                                    pos
+                                }
+                            }
                         ).putExtra(TYPE, ICON)
                     )
                 }
 
 
             }
-            btnGallery.onSingleClick { }
+            btnGallery.onSingleClick {
+                startActivity(newIntent(applicationContext, GalleryActivity::class.java).putExtra(DATA,ICON))
+            }
             btnCamera.onSingleClick {
                 if (ActivityCompat.checkSelfPermission(
                         applicationContext,
@@ -178,17 +208,16 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
             }
         }
         adapterMyIcons.onClick = {
-            if (adapterMyIcons.pos != it) {
                 posChoose = arrayOf(-1, -1)
                 adapterMyIcons.pos = it
                 adapterMyIcons.submitList(arrPath)
                 adapterPathCategory.pos = -1
                 adapterPathCategory.submitList(arrItemCategory)
-            }
+            Glide.with(applicationContext).load(arrPath[it])
+                .into(binding.imvIcons)
         }
 
         adapterCategory.onClick = {
-            if (adapterCategory.pos != it) {
                 adapterCategory.pos = it
                 adapterCategory.submitList(arrCategory)
                 arrItemCategory.clear()
@@ -200,11 +229,9 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
                     adapterPathCategory.pos = -1
                 }
                 adapterPathCategory.submitList(arrItemCategory)
-            }
         }
 
         adapterPathCategory.onClick = {
-            if (adapterPathCategory.pos != it) {
                 posChoose = arrayOf(adapterCategory.pos, it)
                 adapterPathCategory.pos = it
                 adapterPathCategory.submitList(arrItemCategory)
@@ -213,7 +240,6 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
                 adapterMyIcons.submitList(arrPath)
                 Glide.with(applicationContext).load(ASSET + arrItemCategory[it])
                     .into(binding.imvIcons)
-            }
         }
 
 
@@ -238,6 +264,7 @@ class EditIconsActivity : AbsBaseActivity<ActivityEditIconsBinding>() {
 
     override fun onRestart() {
         super.onRestart()
+        Log.d("TAG", "onRestart_____:000000 ")
         getData()
     }
     override fun onRequestPermissionsResult(

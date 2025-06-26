@@ -21,7 +21,9 @@ class PathCategoryAdapter :
     ) {
         Glide.with(binding.imv).load(ASSET + data).into(binding.imv)
         binding.imv.setOnClickListener {
-            onClick?.invoke(position)
+            if(pos != position){
+                onClick?.invoke(position)
+            }
         }
         if (pos == position) {
             binding.bg.setBackgroundResource(R.drawable.bg_choose_icon)

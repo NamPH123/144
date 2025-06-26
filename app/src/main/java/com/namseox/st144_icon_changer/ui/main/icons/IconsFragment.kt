@@ -2,6 +2,7 @@ package com.namseox.st144_icon_changer.ui.main.icons
 
 import android.view.View
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.observe
 import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseFragment
 import com.namseox.st144_icon_changer.databinding.FragmentIconsBinding
@@ -12,6 +13,7 @@ import com.namseox.st144_icon_changer.ui.main.MainActivity
 import com.namseox.st144_icon_changer.utils.Const.DATA
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
 import com.namseox.st144_icon_changer.utils.DataHelper.arrIcon
+import com.namseox.st144_icon_changer.utils.DataHelper.mutableLiveData
 import com.namseox.st144_icon_changer.utils.DataHelper.searchApps
 import com.namseox.st144_icon_changer.utils.newIntent
 import java.io.File
@@ -34,9 +36,17 @@ class IconsFragment : AbsBaseFragment<FragmentIconsBinding, MainActivity>() {
         adapterIconsChanger = IconsAdapter()
         binding.rcvIconChanger.adapter = adapterIconsChanger
         binding.rcvIconChanger.itemAnimator = null
-        arrIconChanger.addAll(arrIcon.flatMap { it.path }.filter { it.contains("avatar") })
-        adapterIconsChanger.submitList(arrIconChanger)
+        mutableLiveData.observe(this){
+            if(it==1){
+                arrSubApp.clear()
+                arrSubApp.addAll(arrApp)
+                adapterIcon.submitList(arrSubApp)
 
+
+                arrIconChanger.addAll(arrIcon.flatMap { it.path }.filter { it.contains("avatar") })
+                adapterIconsChanger.submitList(arrIconChanger)
+            }
+        }
 
     }
 

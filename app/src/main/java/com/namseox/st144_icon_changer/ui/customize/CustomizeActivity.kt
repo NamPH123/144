@@ -1,7 +1,12 @@
 package com.namseox.st144_icon_changer.ui.customize
 
+import android.app.WallpaperManager
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityCustomizeBinding
@@ -9,10 +14,10 @@ import com.namseox.st144_icon_changer.dialog.DialogSetWallpaper
 import com.namseox.st144_icon_changer.model.ChangeIconModel
 import com.namseox.st144_icon_changer.ui.changeicon.AppAdapter
 import com.namseox.st144_icon_changer.ui.changeicon.ChangeIconsAdapter
+import com.namseox.st144_icon_changer.ui.main.MainActivity
 import com.namseox.st144_icon_changer.ui.success.SuccessActivity
 import com.namseox.st144_icon_changer.utils.Const.ASSET
 import com.namseox.st144_icon_changer.utils.Const.DATA
-import com.namseox.st144_icon_changer.utils.Const.ICON
 import com.namseox.st144_icon_changer.utils.Const.THEMES
 import com.namseox.st144_icon_changer.utils.Const.TYPE
 import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
@@ -26,6 +31,7 @@ import com.namseox.st144_icon_changer.utils.show
 import com.namseox.st144_icon_changer.utils.showToast
 
 class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
+    lateinit var mBitmap : Bitmap
     var pos = 0
     var posChangeIcon = 0
     var checkSetWallpaper = true
@@ -35,32 +41,97 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_customize
 
     override fun initView() {
-        pos = intent.getIntExtra(DATA, 0)
-        Glide.with(applicationContext).load(ASSET + arrTheme[pos].substringBeforeLast("_")).into(binding.imv)
+        if(arrApp.size==0){
+            startActivity(newIntent(applicationContext,MainActivity::class.java))
+        }else{
+            pos = intent.getIntExtra(DATA, 0)
+            Glide.with(applicationContext)
+                .asBitmap()
+                .load(ASSET + convertPath(arrTheme[pos]))
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                    ) {
+                        mBitmap = resource
+                        binding.imv.setImageBitmap(resource)
+                    }
 
-        adapter = ChangeIconsAdapter()
-        binding.rcv.adapter = adapter
-        binding.rcv.itemAnimator = null
-        arrIcon.find {
-            it.category == (arrTheme[pos].substringBeforeLast(".").split("_"))[2]
-        }!!.path.forEach {
-            if(!it.contains("avatar")){
-                arrChangeIcon.add(ChangeIconModel(it, false, null))
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+
+                })
+
+            adapter = ChangeIconsAdapter()
+            binding.rcv.adapter = adapter
+            binding.rcv.itemAnimator = null
+            arrIcon.find {
+                it.category == (arrTheme[pos].substringBeforeLast(".").split("_"))[2]
+            }!!.path.forEach {
+                if(!it.contains("avatar")){
+                    arrChangeIcon.add(ChangeIconModel(it, false, null))
+                }
             }
-        }
-        adapter.submitList(arrChangeIcon)
+            adapter.submitList(arrChangeIcon)
 
-        appAdapter = AppAdapter()
-        binding.rcvChooseApp.adapter = appAdapter
-        binding.rcvChooseApp.itemAnimator = null
-        appAdapter.submitList(arrApp)
+            appAdapter = AppAdapter()
+            binding.rcvChooseApp.adapter = appAdapter
+            binding.rcvChooseApp.itemAnimator = null
+            appAdapter.submitList(arrApp)
+        }
+
     }
 
     override fun initAction() {
+        val wallpaperManager = WallpaperManager.getInstance(this)
         binding.apply {
             tvApply.onSingleClick {
-                var dialog = DialogSetWallpaper(this@CustomizeActivity,ASSET + arrTheme[pos].substringBeforeLast("_"))
-                dialog.onClick = {
+                if(checkSetWallpaper){
+                    var dialog = DialogSetWallpaper(this@CustomizeActivity)
+                    dialog.onClick = {
+                        when(it){
+                            0->{
+                                wallpaperManager.setBitmap(
+                                    mBitmap,
+                                    null,
+                                    false,
+                                    WallpaperManager.FLAG_LOCK
+                                )
+                            }
+                            1->{
+                                wallpaperManager.setBitmap(
+                                    mBitmap,
+                                    null,
+                                    false,
+                                    WallpaperManager.FLAG_SYSTEM
+                                )
+                            }
+                            2->{
+                                wallpaperManager.setBitmap(
+                                    mBitmap,
+                                    null,
+                                    false,
+                                    WallpaperManager.FLAG_LOCK or WallpaperManager.FLAG_SYSTEM
+                                )
+                            }
+                        }
+                        createMultipleShortcuts(
+                            applicationContext,
+                            arrChangeIcon.filter { it.check }.map { it.app!! },
+                            arrChangeIcon.filter { it.check }.map { it.path }){
+                            startActivity(
+                                newIntent(
+                                    applicationContext,
+                                    SuccessActivity::class.java
+                                ).putExtra(DATA,ASSET+ arrTheme[pos]).putExtra(
+                                    TYPE,
+                                    THEMES
+                                )
+                            )
+                        }
+                    }
+                    dialog.show()
+                }else{
                     createMultipleShortcuts(
                         applicationContext,
                         arrChangeIcon.filter { it.check }.map { it.app!! },
@@ -69,14 +140,13 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
                             newIntent(
                                 applicationContext,
                                 SuccessActivity::class.java
-                            ).putExtra(DATA, arrTheme[pos]).putExtra(
+                            ).putExtra(DATA,ASSET+ arrTheme[pos]).putExtra(
                                 TYPE,
                                 THEMES
                             )
                         )
                     }
                 }
-                dialog.show()
             }
             imvClose.onSingleClick {
                 binding.llBottomSheet.visibility = View.GONE
@@ -99,12 +169,16 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
                 ctlIcons.hide()
                 tvBG.setBackgroundResource(R.drawable.bg_choose)
                 tvIcons.setBackgroundResource(R.drawable.bg_card_border)
+                tvBG.setTextColor(resources.getColor(R.color.white))
+                tvIcons.setTextColor(resources.getColor(R.color.e09cd5))
             }
             tvIcons.onSingleClick {
                 ctlBG.hide()
                 ctlIcons.show()
                 tvIcons.setBackgroundResource(R.drawable.bg_choose)
                 tvBG.setBackgroundResource(R.drawable.bg_card_border)
+                tvBG.setTextColor(resources.getColor(R.color.e09cd5))
+                tvIcons.setTextColor(resources.getColor(R.color.white))
             }
         }
         adapter.onClick = { pos, type ->
@@ -139,5 +213,10 @@ class CustomizeActivity : AbsBaseActivity<ActivityCustomizeBinding>() {
             binding.llBottomSheet.visibility = View.GONE
             adapter.submitList(arrChangeIcon)
         }
+    }
+    fun convertPath(input: String): String {
+        val fileName = input.substringAfterLast("/").substringBeforeLast("_") // ví dụ: minimal_18
+        val code = fileName.substringBefore("_") // ví dụ: minimal
+        return "bg/$code/${fileName}.jpg"
     }
 }

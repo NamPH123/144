@@ -15,6 +15,9 @@ import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityCameraBinding
 import com.namseox.st144_icon_changer.ui.editphoto.EditPhotoActivity
+import com.namseox.st144_icon_changer.ui.main.MainActivity
+import com.namseox.st144_icon_changer.utils.Const.DATA
+import com.namseox.st144_icon_changer.utils.DataHelper.arrApp
 import com.namseox.st144_icon_changer.utils.checkPermision
 import com.namseox.st144_icon_changer.utils.flashManager
 import com.namseox.st144_icon_changer.utils.hasBackCamera
@@ -34,20 +37,23 @@ class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_camera
 
     override fun initView() {
-//        previewView
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED || if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                !checkPermision(this)
+        if(arrApp.size==0){
+            startActivity(newIntent(applicationContext,MainActivity::class.java))
+        }else{
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED || if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    !checkPermision(this)
+                } else {
+                    false
+                }
+            ) {
+                finish()
             } else {
-                false
+                flashManager(false, camera)
+                initCameraProvider()
             }
-        ) {
-            finish()
-        } else {
-            flashManager(false, camera)
-            initCameraProvider()
         }
     }
 
@@ -107,7 +113,7 @@ class CameraActivity : AbsBaseActivity<ActivityCameraBinding>() {
                 ContextCompat.getMainExecutor(applicationContext),
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                        startActivity(newIntent(applicationContext, EditPhotoActivity::class.java))
+                        startActivity(newIntent(applicationContext, EditPhotoActivity::class.java).putExtra(DATA,photoFile.path))
                     }
 
                     override fun onError(exc: ImageCaptureException) {

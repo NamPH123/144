@@ -5,7 +5,9 @@ import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.base.AbsBaseActivity
 import com.namseox.st144_icon_changer.databinding.ActivityChangeIconsBinding
 import com.namseox.st144_icon_changer.model.ChangeIconModel
+import com.namseox.st144_icon_changer.ui.main.MainActivity
 import com.namseox.st144_icon_changer.ui.success.SuccessActivity
+import com.namseox.st144_icon_changer.utils.Const.ASSET
 import com.namseox.st144_icon_changer.utils.Const.DATA
 import com.namseox.st144_icon_changer.utils.Const.ICON
 import com.namseox.st144_icon_changer.utils.Const.TYPE
@@ -25,23 +27,26 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_change_icons
 
     override fun initView() {
-        pos = intent.getIntExtra("pos", 0)
+        if (arrApp.size == 0) {
+            startActivity(newIntent(applicationContext, MainActivity::class.java))
+        } else {
+            pos = intent.getIntExtra("pos", 0)
 
-        adapter = ChangeIconsAdapter()
-        binding.rcv.adapter = adapter
-        binding.rcv.itemAnimator = null
-        arrIcon[pos].path.forEach {
-            if(!it.contains("avatar")){
-                arrChangeIcon.add(ChangeIconModel(it, false, null))
+            adapter = ChangeIconsAdapter()
+            binding.rcv.adapter = adapter
+            binding.rcv.itemAnimator = null
+            arrIcon[pos].path.forEach {
+                if (!it.contains("avatar")) {
+                    arrChangeIcon.add(ChangeIconModel(it, false, null))
+                }
             }
-//            arrChangeIcon.add(ChangeIconModel(it, false, null))
-        }
-        adapter.submitList(arrChangeIcon)
+            adapter.submitList(arrChangeIcon)
 
-        appAdapter = AppAdapter()
-        binding.rcvChooseApp.adapter = appAdapter
-        binding.rcvChooseApp.itemAnimator = null
-        appAdapter.submitList(arrApp)
+            appAdapter = AppAdapter()
+            binding.rcvChooseApp.adapter = appAdapter
+            binding.rcvChooseApp.itemAnimator = null
+            appAdapter.submitList(arrApp)
+        }
     }
 
     override fun initAction() {
@@ -54,16 +59,21 @@ class ChangeIconsActivity : AbsBaseActivity<ActivityChangeIconsBinding>() {
         binding.ctl.onSingleClick { }
         binding.imvBack.onSingleClick { finish() }
         binding.tvApply.onSingleClick {
-            createMultipleShortcuts(
-                applicationContext,
-                arrChangeIcon.filter { it.check }.map { it.app!! },
-                arrChangeIcon.filter { it.check }.map { it.path }){
-                startActivity(
-                    newIntent(
-                        applicationContext,
-                        SuccessActivity::class.java
-                    ).putExtra(DATA, arrIcon[pos].path.find { it.contains("avatar") }).putExtra(TYPE,ICON)
-                )
+            if(arrChangeIcon.filter { it.check }.size>0){
+                createMultipleShortcuts(
+                    applicationContext,
+                    arrChangeIcon.filter { it.check }.map { it.app!! },
+                    arrChangeIcon.filter { it.check }.map { it.path }){
+                    startActivity(
+                        newIntent(
+                            applicationContext,
+                            SuccessActivity::class.java
+                        ).putExtra(DATA, ASSET + arrIcon[pos].path.find { it.contains("avatar") })
+                            .putExtra(TYPE, ICON)
+                    )
+                }
+            }else{
+             showToast(applicationContext,R.string.you_have_no_choice_yet)
             }
         }
         adapter.onClick = { pos, type ->

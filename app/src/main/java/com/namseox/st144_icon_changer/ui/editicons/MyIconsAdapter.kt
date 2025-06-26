@@ -21,11 +21,15 @@ class MyIconsAdapter :
     ) {
         Glide.with(binding.root.context).load(data).into(binding.imv)
         if (pos == position) {
-            binding.bg.setBackgroundColor("#FBF1F8".toColorInt())
-        } else {
             binding.bg.setBackgroundResource(R.drawable.bg_my_icons)
+        } else {
+            binding.bg.setBackgroundColor("#FBF1F8".toColorInt())
         }
-        binding.root.onSingleClick { onClick?.invoke(position) }
+        binding.root.onSingleClick {
+            if (pos != position) {
+                onClick?.invoke(position)
+            }
+        }
     }
 
     class MyIconsDiff : AbsBaseDiffCallBack<String>() {

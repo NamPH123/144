@@ -1,18 +1,21 @@
 package com.namseox.st144_icon_changer.utils
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import com.namseox.st144_icon_changer.R
 import com.namseox.st144_icon_changer.model.AppInfoModel
 import com.namseox.st144_icon_changer.model.IconModel
 import com.namseox.st144_icon_changer.model.LanguageModel
 
 object DataHelper {
+    var mutableLiveData = MutableLiveData<Int>(0)
     var arrTheme = arrayListOf<String>()
     var arrIcon = arrayListOf<IconModel>()
     var arrBG = arrayListOf<IconModel>()
     var arrApp = arrayListOf<AppInfoModel>()
 
     fun Context.getData() {
+        mutableLiveData.postValue(0)
         var assetManager = assets
 
         arrTheme.clear()
@@ -45,6 +48,7 @@ object DataHelper {
         }
 
         arrApp.addAll(getAllLaunchableApps())
+        mutableLiveData.postValue(1)
     }
 
     var positionLanguageOld: Int = 0
